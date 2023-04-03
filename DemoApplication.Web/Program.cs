@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureDataAccess(builder.Configuration);
-
+builder.Services.AddWeb(builder.Configuration);
+builder.Services.AddService();
 
 var app = builder.Build();
 
