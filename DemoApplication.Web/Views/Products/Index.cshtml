@@ -1,4 +1,6 @@
 ﻿@using DemoApplication.Service.ViewModels.Products;
+@inject IConfiguration config;
+@using DemoApplication.Web.Configuration;
 @model List<ProductViewModel>
 
 
@@ -42,7 +44,7 @@
                                             <span class="fw-bold text-gray-500">@item.Price</span>
                                         </td>
                                         <td class="text-start">
-                                            <span class="fw-bold text-gray-500">@((item.Price * item.Quantity) * (1 + 1))</span>
+                                            <span class="fw-bold text-gray-500">@((item.Price * item.Quantity) * (1 + 0.15))</span>
                                         </td>
                                     </tr>
                                 }

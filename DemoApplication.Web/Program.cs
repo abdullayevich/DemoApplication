@@ -1,5 +1,6 @@
 using DemoApplication.Web.Configuration;
 using DemoApplication.Web.Middlewares;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
