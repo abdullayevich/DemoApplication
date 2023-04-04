@@ -1,4 +1,6 @@
 using DemoApplication.Web.Configuration;
+using DemoApplication.Web.Middlewares;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +20,19 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+app.UseStatusCodePages(async context =>
+{
+    if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+    {
+        context.HttpContext.Response.Redirect("accounts/login");
+    }
+});
+
+app.UseMiddleware<TokenRedirectMiddleware>();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
