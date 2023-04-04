@@ -84,6 +84,28 @@ namespace DemoApplication.Service.Services.Products
             return result;
         }
 
+        public Task<List<ProductAuditViewModel>> GetAllAuditAsync()
+        {
+            var result = (from productAudit in _unitOfWork.ProductAudits.GetAll()
+                          join admin in _unitOfWork.Admins.GetAll()
+                          on productAudit.AdminId equals admin.Id
+                          select new ProductAuditViewModel()
+                          {
+                              Id = productAudit.Id,
+                              FullName = admin.FullName,
+                              UserName = admin.UserName,
+                              NewTitle = productAudit.NewTitle,
+                              OldTitle = productAudit.OldTitle,
+                              NewQuantity = productAudit.NewQuantity,
+                              OldQuantity = productAudit.OldQuantity,
+                              NewPrice = productAudit.NewPrice,
+                              OldPrice = productAudit.OldPrice,
+                              Status = productAudit.Status,
+                              Date = productAudit.CreatedAt
+                          }).OrderByDescending(x => x.Date).ToListAsync();
+            return result;
+        }
+
         public async Task<ProductViewModel> GetAsync(int id)
         {
             var product = await _unitOfWork.Products.FindByIdAsync(id);
@@ -98,7 +120,19 @@ namespace DemoApplication.Service.Services.Products
 
             _unitOfWork.Products.TrackingDeteched(product);
 
-            var entity = product;
+            var productAudit = new ProductAudit()
+            {
+                CreatedAt = DateTime.Now,
+                LastUpdatedAt = DateTime.Now,
+                NewPrice = updateDto.Price,
+                OldPrice = product.Price,
+                NewQuantity = updateDto.Quantity,
+                OldQuantity = product.Quantity,
+                NewTitle = updateDto.Title,
+                OldTitle = product.Title,
+                Status = ProductStatus.Updated,
+                AdminId = _identityService.Id!.Value,
+            };
 
             product.LastUpdatedAt = DateTime.Now;
             product.Price = updateDto.Price;
@@ -107,19 +141,6 @@ namespace DemoApplication.Service.Services.Products
 
             _unitOfWork.Products.Update(id, product);
 
-            var productAudit = new ProductAudit()
-            {
-                CreatedAt = DateTime.Now,
-                LastUpdatedAt = DateTime.Now,
-                NewPrice = updateDto.Price,
-                OldPrice = entity.Price,
-                NewQuantity = updateDto.Quantity,
-                OldQuantity = entity.Quantity,
-                NewTitle = updateDto.Title,
-                OldTitle = entity.Title,
-                Status = ProductStatus.Updated,
-                AdminId = _identityService.Id!.Value,
-            };
             _unitOfWork.ProductAudits.Add(productAudit);
             var res = await _unitOfWork.SaveChangesAsync();
             return res > 0;

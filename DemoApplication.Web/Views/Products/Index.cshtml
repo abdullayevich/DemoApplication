@@ -1,0 +1,57 @@
+﻿@using DemoApplication.Service.ViewModels.Products;
+@model List<ProductViewModel>
+
+
+<div class="card card-flush">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <div class="card-title">
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <div class="py-5">
+            <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                <th class="text-start min-w-50px">ID</th>
+                                <th class="text-start min-w-200px">TITLE</th>
+                                <th class="text-start min-w-100px">QUANTITY</th>
+                                <th class="text-start min-w-100px">PRICE</th>
+                                <th class="text-start min-w-100px">TOTAL PRICE with VAT</th>
+                            </tr>
+                        </thead>
+                        <tbody class="fw-semibold text-gray-800">
+                            @{
+                                foreach (var item in Model)
+                                {
+
+                                    <tr class="tr-shadow text-dark">
+                                        <td class="text-start px-sm-0">
+                                            <span class="fw-bold">@item.Id</span>
+                                        </td>
+                                        <td class="text-start px-sm-0 d-flex align-items-center">
+                                            <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                            </div>
+                                            <span class="fw-bold text-hover-info text-gray-800 ms-3">@item.Title</span>
+                                        </td>
+                                        <td class="text-start">
+                                            <span class="fw-bold text-gray-500">@item.Quantity</span>
+                                        </td>
+                                        <td class="text-start">
+                                            <span class="fw-bold text-gray-500">@item.Price</span>
+                                        </td>
+                                        <td class="text-start">
+                                            <span class="fw-bold text-gray-500">@((item.Price * item.Quantity) * (1 + 1))</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
