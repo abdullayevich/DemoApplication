@@ -105,6 +105,28 @@ namespace DemoApplication.Service.Services.Products
                           }).OrderByDescending(x => x.Date).ToListAsync();
             return result;
         }
+        public Task<List<ProductAuditViewModel>> GetByAuditAsync(string startDate, string endDate)
+        {
+            var result = (from productAudit in _unitOfWork.ProductAudits.GetAll()
+                          .Where(x => x.CreatedAt >= DateTime.Parse(startDate) && x.CreatedAt <= DateTime.Parse(endDate))
+                          join admin in _unitOfWork.Admins.GetAll()
+                          on productAudit.AdminId equals admin.Id
+                          select new ProductAuditViewModel()
+                          {
+                              Id = productAudit.Id,
+                              FullName = admin.FullName,
+                              UserName = admin.UserName,
+                              NewTitle = productAudit.NewTitle,
+                              OldTitle = productAudit.OldTitle,
+                              NewQuantity = productAudit.NewQuantity,
+                              OldQuantity = productAudit.OldQuantity,
+                              NewPrice = productAudit.NewPrice,
+                              OldPrice = productAudit.OldPrice,
+                              Status = productAudit.Status,
+                              Date = productAudit.CreatedAt
+                          }).OrderByDescending(x => x.Date).ToListAsync();
+            return result;
+        }
 
         public async Task<ProductViewModel> GetAsync(int id)
         {

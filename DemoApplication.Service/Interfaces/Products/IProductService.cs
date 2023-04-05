@@ -16,5 +16,6 @@ namespace DemoApplication.Service.Interfaces.Products
         public Task<ProductViewModel> GetAsync(int id);
         public Task<List<ProductViewModel>> GetAllAsync();
         public Task<List<ProductAuditViewModel>> GetAllAuditAsync();
+        public Task<List<ProductAuditViewModel>> GetByAuditAsync(string startDate, string endDate);
     }
 }

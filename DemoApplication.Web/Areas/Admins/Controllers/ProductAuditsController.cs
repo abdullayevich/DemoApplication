@@ -1,4 +1,5 @@
 ﻿using DemoApplication.Domain.Entities;
+using DemoApplication.Service.Dtos.Products;
 using DemoApplication.Service.Interfaces.Products;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,29 @@ public class ProductAuditsController : BaseController
     public async Task<ViewResult> Index()
     {
         var productAudits = await _service.GetAllAuditAsync();
-        return View("Index", productAudits);
+        var result = new ProductGetByDateDto()
+        {
+            ProductAudits = productAudits,
+            StartDate = DateTime.Now.ToString("yyyy-MM-dd"),
+            EndDate = DateTime.Now.ToString("yyyy-MM-dd")
+        };
+        return View("Index", result);
+    }
+
+    [HttpPost("GetAllByDate")]
+    public async Task<ViewResult> GetAllByDateAsync(ProductGetByDateDto productGet)
+    {
+        if (ModelState.IsValid)
+        {
+            var res = await _service.GetByAuditAsync(productGet.StartDate, productGet.EndDate);
+            var result = new ProductGetByDateDto()
+            {
+                StartDate = productGet.StartDate,
+                EndDate = productGet.EndDate,
+                ProductAudits = res
+            };
+            return View("Index", result);
+        }
+        else return View("Index");
     }
 }
