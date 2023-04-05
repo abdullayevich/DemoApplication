@@ -167,5 +167,13 @@ namespace DemoApplication.Service.Services.Products
             var res = await _unitOfWork.SaveChangesAsync();
             return res > 0;
         }
+
+        public async Task<List<ProductViewModel>> GetAllByDateAsync(string from, string to)
+        {
+            var res = await _unitOfWork.Products.GetAll()
+                      .Where(x => x.CreatedAt >= DateTime.Parse(from) && x.CreatedAt <= DateTime.Parse(to))
+                      .OrderByDescending(x => x.CreatedAt).Select(x => (ProductViewModel)x).ToListAsync();
+            return res;
+        }
     }
 }

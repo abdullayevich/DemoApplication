@@ -15,7 +15,8 @@ namespace DemoApplication.Service.Interfaces.Products
         public Task<bool> DeleteAsync(int id);
         public Task<ProductViewModel> GetAsync(int id);
         public Task<List<ProductViewModel>> GetAllAsync();
+        public Task<List<ProductViewModel>> GetAllByDateAsync(string from, string to);
         public Task<List<ProductAuditViewModel>> GetAllAuditAsync();
-        public Task<List<ProductAuditViewModel>> GetByAuditAsync(string startDate, string endDate);
+        public Task<List<ProductAuditViewModel>> GetByAuditAsync(string from, string to);
     }
 }

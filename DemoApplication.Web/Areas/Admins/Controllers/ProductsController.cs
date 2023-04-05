@@ -71,4 +71,10 @@ public class ProductsController : BaseController
         }
         else return await UpdateAsync(productId);
     }
+
+    [HttpGet("products-by-date")]
+    public async Task<IActionResult> GetAllByDateAsync(string from, string to)
+    {
+        return Ok(await _service.GetAllByDateAsync(from, to));
+    }
 }

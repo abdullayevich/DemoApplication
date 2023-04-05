@@ -42,4 +42,10 @@ public class ProductAuditsController : BaseController
         }
         else return View("Index");
     }
+
+    [HttpGet("productAudits-by-date")]
+    public async Task<IActionResult> GetByDateAsync(string from, string to)
+    {
+        return Ok(await _service.GetByAuditAsync(from, to));
+    }
 }
